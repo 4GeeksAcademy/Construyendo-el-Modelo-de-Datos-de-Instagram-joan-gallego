@@ -4,6 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 import datetime
 
 Base = declarative_base()
+    
 
 class User(Base):
     __tablename__ = 'user'
@@ -57,3 +58,13 @@ class Like(Base):
 
     user = relationship('User', back_populates='likes')
     post = relationship('Post', back_populates='likes')
+
+class Follower(Base):
+    __tablename__ = 'follower'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)  
+    follower_id = Column(Integer, ForeignKey('user.id'), nullable=False)  
+
+    user = relationship('User', foreign_keys=[user_id], back_populates='followers')
+    follower = relationship('User', foreign_keys=[follower_id], back_populates='following')
